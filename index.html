@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GridPulse — Real-time Karnataka power outage tracker. Get alerts for BESCOM scheduled power cuts, weather-based risk scoring, and area-specific notifications.">
+  <meta name="keywords" content="BESCOM, power outage, Karnataka, Bangalore, electricity, power cut, tracker, alert">
+  <title>GridPulse ⚡ — Karnataka Power Outage Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+  <!-- Cursor Elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Background Glows -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="logo" id="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">GridPulse</span>
+      </a>
+      <div class="nav-actions">
+        <div class="nav-badge">
+          <span class="pulse-dot"></span>
+          <span>Live Tracking</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          🌙
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-badge">
+        ⚡ BESCOM • Karnataka • Real-Time
+      </div>
+      <h1>
+        Know Your<br>
+        <span class="gradient-text">Power Status</span>
+      </h1>
+      <p class="hero-subtitle">
+        Track scheduled power outages across Bangalore. Get instant alerts before the lights go out. Stay prepared with weather-based risk predictions.
+      </p>
+
+      <!-- Search -->
+      <div class="search-section">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search your area — Koramangala, Whitefield, HSR..."
+            autocomplete="off"
+            list="areaSuggestions"
+          >
+          <datalist id="areaSuggestions"></datalist>
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="active">🔴 Active Now</button>
+          <button class="filter-tab" data-filter="upcoming">🟡 Upcoming</button>
+          <button class="filter-tab" data-filter="emergency">🟠 Emergency</button>
+          <button class="filter-tab" data-filter="completed">🟢 Completed</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Row -->
+  <section class="container">
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card glass-card interactive" data-filter="all" role="button" tabindex="0">
+        <div class="stat-number cyan" id="statTotal">—</div>
+        <div class="stat-label">Total Outages</div>
+      </div>
+      <div class="stat-card glass-card interactive" data-filter="active" role="button" tabindex="0">
+        <div class="stat-number magenta" id="statActive">—</div>
+        <div class="stat-label">Active Now</div>
+      </div>
+      <div class="stat-card glass-card interactive" data-filter="upcoming" role="button" tabindex="0">
+        <div class="stat-number purple" id="statUpcoming">—</div>
+        <div class="stat-label">Upcoming</div>
+      </div>
+      <div class="stat-card glass-card interactive" data-filter="completed" role="button" tabindex="0">
+        <div class="stat-number green" id="statCompleted">—</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outage Feed -->
+  <section class="container" id="outageSection">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="icon">📋</span>
+        Power Outage Feed
+      </h2>
+      <div class="last-updated">
+        🕐 Last updated: <span class="time" id="lastUpdated">—</span>
+      </div>
+    </div>
+    <div class="outage-grid" id="outageGrid">
+      <!-- Outage cards rendered by JS -->
+    </div>
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">🔌</div>
+      <div class="no-results-text">No outages found for your search. Try a different area name.</div>
+    </div>
+  </section>
+
+  <!-- Weather & Risk Section -->
+  <section class="container weather-section" id="weatherSection">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="icon">🌦️</span>
+        Weather & Risk Assessment
+      </h2>
+    </div>
+    <div class="weather-grid">
+      <div class="weather-main glass-card" id="weatherCard">
+        <div class="weather-city">📍 Bangalore, Karnataka</div>
+        <div class="weather-temp" id="weatherTemp">—°C</div>
+        <div class="weather-desc" id="weatherDesc">Loading weather...</div>
+        <div class="weather-details-grid">
+          <div class="weather-detail-item">
+            <span class="wd-icon">💧</span>
+            <div>
+              <div class="wd-label">Humidity</div>
+              <div class="wd-value" id="weatherHumidity">—%</div>
+            </div>
+          </div>
+          <div class="weather-detail-item">
+            <span class="wd-icon">💨</span>
+            <div>
+              <div class="wd-label">Wind</div>
+              <div class="wd-value" id="weatherWind">— km/h</div>
+            </div>
+          </div>
+          <div class="weather-detail-item">
+            <span class="wd-icon">🌧️</span>
+            <div>
+              <div class="wd-label">Rain</div>
+              <div class="wd-value" id="weatherRain">— mm</div>
+            </div>
+          </div>
+          <div class="weather-detail-item">
+            <span class="wd-icon">☁️</span>
+            <div>
+              <div class="wd-label">Cloud Cover</div>
+              <div class="wd-value" id="weatherCloud">—%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="risk-card glass-card" id="riskCard">
+        <div class="risk-meter" id="riskMeter" style="--risk-color: var(--neon-green); --risk-percent: 25%;">
+          <div class="risk-level low" id="riskLevel">LOW</div>
+          <div class="risk-label">Outage Risk</div>
+        </div>
+        <p class="risk-description" id="riskDescription">
+          Loading risk assessment...
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alert Subscription -->
+  <section class="container alert-section" id="alertSection">
+    <div class="alert-card glass-card">
+      <div class="alert-icon">🔔</div>
+      <h2 class="alert-title">Never Get Caught in the Dark</h2>
+      <p class="alert-subtitle">
+        Subscribe to get instant Telegram alerts when a power outage is scheduled for your area. We'll notify you the evening before.
+      </p>
+      <form class="alert-form" id="alertForm">
+        <select id="alertArea" required>
+          <option value="" disabled selected>Select your area</option>
+          <option value="Koramangala">Koramangala</option>
+          <option value="Whitefield">Whitefield</option>
+          <option value="Jayanagar">Jayanagar</option>
+          <option value="Indiranagar">Indiranagar</option>
+          <option value="Electronic City">Electronic City</option>
+          <option value="Hebbal">Hebbal</option>
+          <option value="Marathahalli">Marathahalli</option>
+          <option value="HSR Layout">HSR Layout</option>
+          <option value="Yelahanka">Yelahanka</option>
+          <option value="BTM Layout">BTM Layout</option>
+          <option value="Rajajinagar">Rajajinagar</option>
+          <option value="Bannerghatta Road">Bannerghatta Road</option>
+          <option value="JP Nagar">JP Nagar</option>
+          <option value="Majestic">Majestic</option>
+          <option value="Malleshwaram">Malleshwaram</option>
+          <option value="Vijayanagar">Vijayanagar</option>
+        </select>
+        <input type="text" id="alertTelegram" placeholder="Your Telegram username" required>
+        <button type="submit" class="btn-subscribe">
+          <span>🔔 Subscribe</span>
+        </button>
+      </form>
+      <p class="alert-note">
+        Powered by <a href="https://telegram.org/" target="_blank" rel="noopener">Telegram Bot API</a>. 
+        We'll never spam you — only outage alerts for your chosen area.
+      </p>
+      <div class="subscription-success" id="subscriptionSuccess">
+        <p>✅ Subscribed! You'll get alerts on Telegram before any power outage in your area.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">
+        Built with ⚡ by <span class="neon">GridPulse</span> — Open source Karnataka power outage tracker
+      </p>
+      <p class="footer-text">
+        Data sourced from BESCOM scheduled outage notices • Weather data from Open-Meteo API
+      </p>
+      <div class="footer-links">
+        <a href="#hero">Home</a>
+        <a href="#outageSection">Outages</a>
+        <a href="#weatherSection">Weather</a>
+        <a href="#alertSection">Alerts</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
