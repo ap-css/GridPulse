@@ -3,7 +3,6 @@
 
 **GridPulse** is a premium, real-time power outage tracker for Karnataka (BESCOM focus). Built with a focus on UI/UX, it features a stunning neon glassmorphism design, interactive cursor effects, and weather-based risk assessment.
 
-![GridPulse Screenshot](https://raw.githubusercontent.com/your-username/GridPulse/main/screenshot.png) *(Update this link after pushing!)*
 
 ## 🚀 Features
 - **Neon Glassmorphism UI**: Frosted glass cards with vibrant neon accents.
